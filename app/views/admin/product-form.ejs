@@ -1,0 +1,60 @@
+<%- include('../partials/header') %>
+
+<div class="admin-layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">Shop<span>Ease</span><small>Admin</small></div>
+    <nav class="sidebar-nav">
+      <a href="/admin" class="sidebar-link">📊 Dashboard</a>
+      <a href="/admin/products" class="sidebar-link active">📦 Products</a>
+      <a href="/admin/orders" class="sidebar-link">📋 Orders</a>
+      <a href="/" class="sidebar-link">🛒 View Store</a>
+      <a href="/auth/logout" class="sidebar-link logout">🚪 Logout</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <h1 class="admin-title"><%= isNew ? 'Add New Product' : 'Edit Product' %></h1>
+
+    <div class="admin-card" style="max-width:600px;">
+      <form action="<%= isNew ? '/admin/products/add' : '/admin/products/update/' + product.id %>" method="POST">
+        <div class="form-group">
+          <label>Product Name *</label>
+          <input type="text" name="name" value="<%= product.name || '' %>" required/>
+        </div>
+        <div class="form-group">
+          <label>Description *</label>
+          <textarea name="description" rows="3" required><%= product.description || '' %></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Price (&#8377;) *</label>
+            <input type="number" name="price" value="<%= product.price || '' %>" min="1" step="0.01" required/>
+          </div>
+          <div class="form-group">
+            <label>Stock *</label>
+            <input type="number" name="stock" value="<%= product.stock || '' %>" min="0" required/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Category *</label>
+          <select name="category" required>
+            <option value="">-- Select Category --</option>
+            <% categories.forEach(cat => { %>
+              <option value="<%= cat %>" <%= product.category === cat ? 'selected' : '' %>><%= cat %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Image URL</label>
+          <input type="text" name="image" value="<%= product.image || '' %>" placeholder="https://images.unsplash.com/..."/>
+        </div>
+        <div style="display:flex;gap:0.75rem;margin-top:1rem;">
+          <button type="submit" class="btn-primary"><%= isNew ? 'Add Product' : 'Update Product' %></button>
+          <a href="/admin/products" class="btn-outline">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>
+
+<%- include('../partials/footer') %>

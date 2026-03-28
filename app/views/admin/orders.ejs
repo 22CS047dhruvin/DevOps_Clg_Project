@@ -1,0 +1,45 @@
+<%- include('../partials/header') %>
+
+<div class="admin-layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">Shop<span>Ease</span><small>Admin</small></div>
+    <nav class="sidebar-nav">
+      <a href="/admin" class="sidebar-link">📊 Dashboard</a>
+      <a href="/admin/products" class="sidebar-link">📦 Products</a>
+      <a href="/admin/orders" class="sidebar-link active">📋 Orders</a>
+      <a href="/" class="sidebar-link">🛒 View Store</a>
+      <a href="/auth/logout" class="sidebar-link logout">🚪 Logout</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <h1 class="admin-title">All Orders</h1>
+
+    <div class="admin-card">
+      <% if (orders.length === 0) { %>
+        <p style="padding:1rem;color:#888;">No orders yet.</p>
+      <% } else { %>
+        <table class="admin-table">
+          <thead>
+            <tr><th>Order ID</th><th>Customer</th><th>Email</th><th>Amount</th><th>Items</th><th>Status</th><th>Date</th></tr>
+          </thead>
+          <tbody>
+            <% orders.forEach(order => { %>
+              <tr>
+                <td><a href="/admin/orders/<%= order.id %>">#<%= order.id %></a></td>
+                <td><%= order.customerName %></td>
+                <td><%= order.customerEmail %></td>
+                <td>&#8377;<%= order.totalAmount.toLocaleString('en-IN') %></td>
+                <td><%= order.items.length %></td>
+                <td><span class="status-badge status-<%= order.status.toLowerCase() %>"><%= order.status %></span></td>
+                <td><%= order.orderDate %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
+  </main>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,18 @@
+<%- include('../partials/header') %>
+
+<div class="container success-page">
+  <div class="success-card">
+    <div class="success-icon">🎉</div>
+    <h1>Order Placed Successfully!</h1>
+    <p>Thank you for shopping with ShopEase.</p>
+    <div class="order-id-box">
+      Order ID: <strong>#<%= orderId %></strong>
+    </div>
+    <div class="order-total">&#8377;<%= orderTotal.toLocaleString('en-IN') %></div>
+    <p style="color:#888;font-size:0.9rem;margin-bottom:1.5rem;">You will receive a confirmation shortly.</p>
+    <a href="/track-order" class="btn-outline" style="margin-right:0.75rem;">Track Order</a>
+    <a href="/" class="btn-primary">Continue Shopping</a>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

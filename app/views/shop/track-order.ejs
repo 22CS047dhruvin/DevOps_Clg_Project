@@ -1,0 +1,46 @@
+<%- include('../partials/header') %>
+
+<div class="container" style="padding-top:2rem;max-width:700px;">
+  <h1 class="page-title">Track Your Order</h1>
+
+  <div class="form-card" style="margin-bottom:2rem;">
+    <form action="/track-order" method="GET">
+      <div class="form-group">
+        <label>Enter your Email Address</label>
+        <input type="email" name="email" placeholder="your@email.com" value="<%= email %>" required/>
+      </div>
+      <button type="submit" class="btn-primary">Track Orders</button>
+    </form>
+  </div>
+
+  <% if (email && orders.length === 0) { %>
+    <div class="empty-state">
+      <div class="empty-icon">📦</div>
+      <p>No orders found for <strong><%= email %></strong></p>
+    </div>
+  <% } %>
+
+  <% orders.forEach(order => { %>
+    <div class="order-track-card">
+      <div class="order-track-header">
+        <span>Order #<%= order.id %></span>
+        <span class="status-badge status-<%= order.status.toLowerCase() %>"><%= order.status %></span>
+      </div>
+      <div class="order-track-body">
+        <p><strong>Date:</strong> <%= order.orderDate %></p>
+        <p><strong>Total:</strong> &#8377;<%= order.totalAmount.toLocaleString('en-IN') %></p>
+        <p><strong>Items:</strong> <%= order.items.length %> item(s)</p>
+        <div class="track-items">
+          <% order.items.forEach(item => { %>
+            <div class="track-item">
+              <span><%= item.productName %></span>
+              <span>Qty: <%= item.quantity %> &times; &#8377;<%= item.unitPrice.toLocaleString('en-IN') %></span>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+  <% }) %>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,72 @@
+<%- include('../partials/header') %>
+
+<div class="admin-layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">Shop<span>Ease</span><small>Admin</small></div>
+    <nav class="sidebar-nav">
+      <a href="/admin" class="sidebar-link">📊 Dashboard</a>
+      <a href="/admin/products" class="sidebar-link">📦 Products</a>
+      <a href="/admin/orders" class="sidebar-link active">📋 Orders</a>
+      <a href="/" class="sidebar-link">🛒 View Store</a>
+      <a href="/auth/logout" class="sidebar-link logout">🚪 Logout</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;">
+      <a href="/admin/orders" class="back-link">&larr; Back to Orders</a>
+    </div>
+    <h1 class="admin-title">Order #<%= order.id %></h1>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+
+      <div class="admin-card">
+        <h3 style="margin-bottom:1rem;">Customer Details</h3>
+        <p><strong>Name:</strong> <%= order.customerName %></p>
+        <p><strong>Email:</strong> <%= order.customerEmail %></p>
+        <p><strong>Address:</strong> <%= order.shippingAddress %></p>
+        <p><strong>Order Date:</strong> <%= order.orderDate %></p>
+      </div>
+
+      <div class="admin-card">
+        <h3 style="margin-bottom:1rem;">Update Status</h3>
+        <p style="margin-bottom:0.75rem;">Current: <span class="status-badge status-<%= order.status.toLowerCase() %>"><%= order.status %></span></p>
+        <form action="/admin/orders/<%= order.id %>/status" method="POST">
+          <select name="status" style="padding:0.5rem;border:1.5px solid #e8e5de;border-radius:6px;font-family:inherit;width:100%;margin-bottom:0.75rem;">
+            <% statuses.forEach(s => { %>
+              <option value="<%= s %>" <%= order.status === s ? 'selected' : '' %>><%= s %></option>
+            <% }) %>
+          </select>
+          <button type="submit" class="btn-primary">Update Status</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="admin-card" style="margin-top:1.5rem;">
+      <h3 style="margin-bottom:1rem;">Order Items</h3>
+      <table class="admin-table">
+        <thead>
+          <tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Subtotal</th></tr>
+        </thead>
+        <tbody>
+          <% order.items.forEach(item => { %>
+            <tr>
+              <td><%= item.productName %></td>
+              <td><%= item.quantity %></td>
+              <td>&#8377;<%= item.unitPrice.toLocaleString('en-IN') %></td>
+              <td>&#8377;<%= item.subtotal.toLocaleString('en-IN') %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3" style="text-align:right;font-weight:700;padding:0.75rem 1rem;">Total</td>
+            <td style="font-weight:800;color:#e85d26;font-size:1.1rem;">&#8377;<%= order.totalAmount.toLocaleString('en-IN') %></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </main>
+</div>
+
+<%- include('../partials/footer') %>

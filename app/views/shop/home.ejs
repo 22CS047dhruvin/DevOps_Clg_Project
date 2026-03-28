@@ -1,0 +1,68 @@
+<%- include('../partials/header') %>
+
+<div class="hero">
+  <div class="hero-inner">
+    <h1>India ka <span>Smart</span><br/>Online Bazaar.</h1>
+    <p>Top Indian brands &bull; Best prices &bull; Fast delivery pan India</p>
+    <form class="search-form" action="/" method="GET">
+      <input type="text" name="search" placeholder="Search products..." value="<%= searchQuery || '' %>"/>
+      <button type="submit">Search</button>
+    </form>
+  </div>
+</div>
+
+<div class="container">
+  <div class="categories">
+    <a href="/" class="cat-btn <%= (!selectedCategory && !searchQuery) ? 'active' : '' %>">All</a>
+    <% categories.forEach(cat => { %>
+      <a href="/?category=<%= cat %>" class="cat-btn <%= selectedCategory === cat ? 'active' : '' %>"><%= cat %></a>
+    <% }) %>
+  </div>
+
+  <div class="section-title">
+    <% if (searchQuery) { %>
+      Results for &ldquo;<%= searchQuery %>&rdquo; <span class="count">(<%= products.length %> items)</span>
+    <% } else if (selectedCategory) { %>
+      <%= selectedCategory %> <span class="count">(<%= products.length %> items)</span>
+    <% } else { %>
+      Featured Products <span class="count">(<%= products.length %> items)</span>
+    <% } %>
+  </div>
+
+  <% if (products.length === 0) { %>
+    <div class="empty-state">
+      <div class="empty-icon">🔍</div>
+      <p>No products found. <a href="/">View all products</a></p>
+    </div>
+  <% } else { %>
+    <div class="product-grid">
+      <% products.forEach(product => { %>
+        <div class="product-card">
+          <a href="/product/<%= product.id %>">
+            <div class="product-img">
+              <img src="<%= product.image %>" alt="<%= product.name %>" loading="lazy"/>
+            </div>
+          </a>
+          <div class="product-body">
+            <div class="product-cat"><%= product.category %></div>
+            <a href="/product/<%= product.id %>" class="product-name"><%= product.name %></a>
+            <p class="product-desc"><%= product.description.substring(0, 80) %>...</p>
+            <div class="product-footer">
+              <span class="product-price">&#8377;<%= product.price.toLocaleString('en-IN') %></span>
+              <% if (product.stock <= 5) { %>
+                <span class="low-stock">Only <%= product.stock %> left!</span>
+              <% } %>
+            </div>
+            <form action="/cart/add" method="POST">
+              <input type="hidden" name="productId" value="<%= product.id %>"/>
+              <input type="hidden" name="quantity" value="1"/>
+              <button type="submit" class="btn-add-cart">+ Add to Cart</button>
+            </form>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>

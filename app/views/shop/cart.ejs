@@ -1,0 +1,53 @@
+<%- include('../partials/header') %>
+
+<div class="container" style="padding-top:2rem;">
+  <h1 class="page-title">Your Cart</h1>
+
+  <% if (cartItems.length === 0) { %>
+    <div class="empty-state">
+      <div class="empty-icon">🛒</div>
+      <p>Your cart is empty.</p>
+      <a href="/" class="btn-primary" style="display:inline-block;margin-top:1rem;">Start Shopping</a>
+    </div>
+  <% } else { %>
+    <div class="cart-layout">
+      <div class="cart-items">
+        <% cartItems.forEach(item => { %>
+          <div class="cart-item">
+            <img src="<%= item.product.image %>" alt="<%= item.product.name %>"/>
+            <div class="cart-item-info">
+              <div class="cart-item-name"><%= item.product.name %></div>
+              <div class="cart-item-cat"><%= item.product.category %></div>
+            </div>
+            <div class="cart-item-qty">Qty: <%= item.quantity %></div>
+            <div class="cart-item-price">&#8377;<%= item.subtotal.toLocaleString('en-IN') %></div>
+            <form action="/cart/remove" method="POST">
+              <input type="hidden" name="productId" value="<%= item.product.id %>"/>
+              <button type="submit" class="btn-remove">&times;</button>
+            </form>
+          </div>
+        <% }) %>
+      </div>
+
+      <div class="cart-summary">
+        <h3>Order Summary</h3>
+        <div class="summary-row">
+          <span>Items (<%= cartItems.length %>)</span>
+          <span>&#8377;<%= total.toLocaleString('en-IN') %></span>
+        </div>
+        <div class="summary-row">
+          <span>Delivery</span>
+          <span style="color:#2d6a4f">FREE</span>
+        </div>
+        <div class="summary-total">
+          <span>Total</span>
+          <span>&#8377;<%= total.toLocaleString('en-IN') %></span>
+        </div>
+        <a href="/checkout" class="btn-primary" style="display:block;text-align:center;margin-top:1rem;">Proceed to Checkout &rarr;</a>
+        <a href="/" style="display:block;text-align:center;margin-top:0.75rem;color:#888;font-size:0.85rem;">&larr; Continue Shopping</a>
+      </div>
+    </div>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>

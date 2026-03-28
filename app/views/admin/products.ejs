@@ -1,0 +1,52 @@
+<%- include('../partials/header') %>
+
+<div class="admin-layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">Shop<span>Ease</span><small>Admin</small></div>
+    <nav class="sidebar-nav">
+      <a href="/admin" class="sidebar-link">📊 Dashboard</a>
+      <a href="/admin/products" class="sidebar-link active">📦 Products</a>
+      <a href="/admin/orders" class="sidebar-link">📋 Orders</a>
+      <a href="/" class="sidebar-link">🛒 View Store</a>
+      <a href="/auth/logout" class="sidebar-link logout">🚪 Logout</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+      <h1 class="admin-title" style="margin:0;">Products</h1>
+      <a href="/admin/products/new" class="btn-primary">+ Add Product</a>
+    </div>
+
+    <div class="admin-card">
+      <table class="admin-table">
+        <thead>
+          <tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          <% products.forEach(product => { %>
+            <tr>
+              <td><strong><%= product.name %></strong></td>
+              <td><%= product.category %></td>
+              <td>&#8377;<%= product.price.toLocaleString('en-IN') %></td>
+              <td><span class="<%= product.stock <= 10 ? 'low-stock' : '' %>"><%= product.stock %></span></td>
+              <td>
+                <span class="status-badge <%= product.active ? 'status-delivered' : 'status-cancelled' %>">
+                  <%= product.active ? 'Active' : 'Inactive' %>
+                </span>
+              </td>
+              <td>
+                <a href="/admin/products/edit/<%= product.id %>" class="link-small">Edit</a>
+                <form action="/admin/products/delete/<%= product.id %>" method="POST" style="display:inline;" onsubmit="return confirm('Delete this product?')">
+                  <button type="submit" class="btn-danger-sm">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<%- include('../partials/footer') %>
